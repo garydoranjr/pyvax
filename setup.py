@@ -13,6 +13,7 @@ SOURCES = [
 pyvax = Extension(
     'pyvax',
     sources=[os.path.join(SOURCE_DIR, s) for s in SOURCES],
+    extra_compile_args=['-O3'],
 )
 
 setup(

@@ -122,6 +122,9 @@
  *                                                                            *
  ******************************************************************************/
 
+#include <limits.h>             /* UCHAR_MAX, USHRT_MAX, UINT_MAX */
+#include <signal.h>             /* SIGFPE, raise() */
+
 #include "convert_vax_data.h"	/* UPCASE, APPEND_UNDERSCORE, */
 
 #ifndef IS_LITTLE_ENDIAN
@@ -158,9 +161,6 @@
 #endif
 
 #endif
-
-#include <limits.h>             /* UCHAR_MAX, USHRT_MAX, UINT_MAX */
-#include <signal.h>             /* SIGFPE, raise() */
 
 #if UCHAR_MAX != 255U || USHRT_MAX != 65535U || UINT_MAX != 4294967295U
 #error convert_vax_data.c requires 8-bit chars, 16-bit shorts, and 32-bit ints
