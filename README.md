@@ -26,7 +26,7 @@ an array of numeric values. For example:
 
     >>> import pyvax
     >>> import numpy as np
-    >>> fstr = pyvax.from_vax_r4('\xd9\xc2\x8b&\xd9\xc2]\x01\xd8\xc2F')
+    >>> fstr = pyvax.from_vax_r4('\xd9\xc2\x8b&\xd9\xc2]\x01')
     >>> print np.fromstring(fstr, dtype='<f4', count=2)
     [-27.14381981 -27.12566566]
 
