@@ -11,6 +11,16 @@ data stored in [VAX](https://en.wikipedia.org/wiki/VAX) format to modern,
 standard IEEE representations. Conversion from IEEE to VAX format is also
 supported.
 
+## Installation
+
+To install:  
+`python setup.py install`
+
+## Testing
+
+After installation, run:  
+`pytest tests/tests.py`
+
 ## Usage
 
 See the original [library documentation](http://pubs.usgs.gov/of/2005/1424/) for
@@ -29,11 +39,6 @@ an array of numeric values. For example:
     >>> fstr = pyvax.from_vax_r4(b'\xd9\xc2\x8b&\xd9\xc2]\x01')
     >>> print np.frombuffer(fstr, dtype='<f4', count=2)
     [-27.14381981 -27.12566566]
-
-## Tests
-
-After installation, run
-`pytest tests/tests.py`
 
 ## Citation
 
