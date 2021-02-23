@@ -1,10 +1,55 @@
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
 #include <stdlib.h>
 #include <string.h>
-#include <Python.h>
 
 #include <stdio.h>
 
 #include "convert_vax_data.h"
+
+#ifndef _NPY_3KCOMPAT_H_
+#define _NPY_3KCOMPAT_H_
+
+#if PY_VERSION_HEX >= 0x03000000
+#ifndef NPY_PY3K
+#define NPY_PY3K 1
+#endif
+#endif
+
+#if defined(NPY_PY3K)
+
+#define PyString_Type PyBytes_Type
+#define PyStringObject PyBytesObject
+#define PyString_FromStringAndSize PyBytes_FromStringAndSize
+#define PyString_AsString PyBytes_AsString
+#define PyString_Size PyBytes_Size
+
+#define MOD_DEF(ob, name, doc, methods)	\
+  static struct PyModuleDef moduledef = { \
+    PyModuleDef_HEAD_INIT, name, doc, -1, methods, }; \
+  ob = PyModule_Create(&moduledef);
+
+#define MOD_INIT(name) PyMODINIT_FUNC PyInit_##name(void)
+#define MOD_SUCCESS_VAL(val) val
+#define MOD_ERROR_VAL NULL
+
+#else
+
+#define PyBytes_Type PyString_Type
+#define PyBytesObject PyStringObject
+#define PyBytes_FromStringAndSize PyString_FromStringAndSize
+#define PyBytes_AsString PyString_AsString
+#define PyBytes_Size PyString_Size
+
+#define MOD_DEF(ob, name, doc, methods)	\
+  ob = Py_InitModule3(name, methods, doc);
+
+#define MOD_INIT(name) PyMODINIT_FUNC init##name(void)
+#define MOD_SUCCESS_VAL(val)
+#define MOD_ERROR_VAL
+
+#endif /* NPY_PY3K */
+
 
 typedef enum {
     FROM_VAX = 0,
@@ -273,9 +318,16 @@ static PyMethodDef pyvax_methods[] = {
    { NULL, NULL, 0, NULL }
 };
 
-void initpyvax(void)
+MOD_INIT(pyvax)
 {
     PyObject *module;
-    module = Py_InitModule3("pyvax", pyvax_methods,
-                       "Python libvaxdata wrapper");
+
+    MOD_DEF(module, "pyvax", "Python libvaxdata wrapper", pyvax_methods);
+
+    if (module == NULL)
+      return MOD_ERROR_VAL;
+
+    return MOD_SUCCESS_VAL(module);
 }
+
+#endif /* _NPY_3KCOMPAT_H_ */
